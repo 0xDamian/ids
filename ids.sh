@@ -1,14 +1,5 @@
 clear
-check_tool() {
-  REQUIRED_PKG="inotify-tools"
-  PKG_OK=$(dpkg-query -W --showformat='${Status}\n' $REQUIRED_PKG|grep "install ok installed")
-  echo Checking for dependencies: $PKG_OK
-  if [ "" = "$PKG_OK" ]; then
-    echo "No dependecies. Setting up dependecies."
-    sudo apt-get --yes install $REQUIRED_PKG 
-  fi
-}
-check_tool
+
 
 path=$1
 shift
@@ -28,7 +19,6 @@ compare() {
   update_md5
   if [[ $md5 != $previous_md5 ]] ; then
     echo -en "\n\n[!]Changes detected!\n\n"
-    inotifywait -r * | tee -a log.txt
     build
     previous_md5=$md5
   else
